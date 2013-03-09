@@ -52,7 +52,9 @@ module PremailerRails
 
       def assets_precompiled?
         # If on-the-fly asset compilation is disabled, we must be precompiling assets.
-        !Rails.configuration.assets.compile rescue false
+        ! Rails.configuration.assets.compile || Rails.configuration.serve_static_assets
+      rescue
+        false
       end
 
       def file_name(path)
