@@ -38,10 +38,10 @@ module PremailerRails
         if assets_enabled?
           file = file_name(path)
           asset = read_asset_from_pipeline(file)
-          if asset.blank?
+          if asset.nil?
             request_and_unzip(file)
           else
-            asset
+            asset.to_s
           end
         end
       end
@@ -66,6 +66,9 @@ module PremailerRails
         end
       end
 
+      # returns:
+      #     nil if asset is not found,
+      #     string containing asset otherwise (may be blank if asset is blank)
       def read_asset_from_pipeline(file)
         if assets_precompiled?
           # Read the precompiled asset
@@ -73,7 +76,7 @@ module PremailerRails
           File.read(File.join(Rails.public_path, asset_path))
         else
           # This will compile and return the asset
-          Rails.application.assets.find_asset(file).to_s
+          Rails.application.assets.find_asset(file)
         end
       end
 
